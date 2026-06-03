@@ -5,11 +5,11 @@
       <hr class="divider" />
       <div class="legal-section">
         <h3>Angaben gemäß § 5 TMG</h3>
-        <p>Max Mustermann<br>Musterstraße 1<br>12345 Musterstadt</p>
+        <p>Alexandru Mardari<br>Michaelsbucherstraße 14<br>94447 Plattling</p>
       </div>
       <div class="legal-section">
         <h3>Kontakt</h3>
-        <p>Telefon: +49 (0) 123 456 78 90<br>E-Mail: info@kbni.de</p>
+        <p>Telefon: +49 (0) 162 4729789<br>E-Mail: alexdemardari@gmail.com</p>
       </div>
       <div class="legal-section">
         <h3>Haftungsausschluss</h3>
