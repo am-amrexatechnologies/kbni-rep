@@ -4,7 +4,7 @@
     <section class="hero">
       <div class="hero-content">
         <span class="hero-badge">Willkommen</span>
-        <h1 class="hero-title">Willkommen zu <span class="hero-highlight">KBNI</span> Plattform</h1>
+        <h1 class="hero-title">Willkommen zu <span class="hero-highlight">KBNI</span></h1>
         <p class="hero-sub">Trainiere, bewerte und chatte — alles an einem Ort.</p>
         <div class="hero-actions" v-if="!auth.isLoggedIn">
           <RouterLink to="/register" class="btn btn-primary btn-lg">Jetzt starten</RouterLink>
