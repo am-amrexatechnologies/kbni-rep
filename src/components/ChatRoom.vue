@@ -21,7 +21,7 @@
           <div class="chat-msg-body">
             <div class="chat-msg-meta">
               <span class="chat-msg-name">{{ msg.username }}</span>
-              <span class="chat-msg-time">{{ formatTime(msg.created_at) }}</span>
+              <span class="chat-msg-time">{{ formatTime(msg.timeposted) }}</span>
             </div>
             <div class="chat-msg-text">{{ msg.text }}</div>
           </div>

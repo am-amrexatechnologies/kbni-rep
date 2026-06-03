@@ -2,17 +2,24 @@ const router = require('express').Router()
 const db     = require('../db/turso')
 const auth   = require('../middleware/auth')
 
-// GET /api/characters  — alle Charaktere mit Bewertungen
+// ── GET /api/characters ─────────────────────────────────────────────────────
+// Alle Anime-Charaktere mit Anime-Name und Durchschnittsbewertung
 router.get('/', async (req, res) => {
   try {
     const result = await db.execute(`
       SELECT
-        c.id, c.name, c.universe, c.category, c.description,
+        ac.id,
+        ac.name,
+        ac.lastname,
+        ac.age,
+        ac.animeid,
+        a.animename,
         ROUND(AVG(cr.rating), 1) AS avg_rating,
         COUNT(cr.rating)         AS rating_count
-      FROM characters c
-      LEFT JOIN character_ratings cr ON cr.character_id = c.id
-      GROUP BY c.id
+      FROM anime_characters ac
+      JOIN  anime a           ON a.id  = ac.animeid
+      LEFT JOIN character_ratings cr ON cr.character_id = ac.id
+      GROUP BY ac.id
       ORDER BY avg_rating DESC NULLS LAST, rating_count DESC
     `)
     res.json(result.rows)
@@ -22,14 +29,25 @@ router.get('/', async (req, res) => {
   }
 })
 
-// GET /api/characters/my-ratings  — eigene Bewertungen (eingeloggt)
+// ── GET /api/characters/anime ────────────────────────────────────────────────
+// Alle Anime-Serien (für Filter)
+router.get('/anime', async (req, res) => {
+  try {
+    const result = await db.execute('SELECT id, animename FROM anime ORDER BY animename')
+    res.json(result.rows)
+  } catch (err) {
+    res.status(500).json({ message: 'Serverfehler.' })
+  }
+})
+
+// ── GET /api/characters/my-ratings ──────────────────────────────────────────
+// Eigene Bewertungen als { characterId: rating }
 router.get('/my-ratings', auth, async (req, res) => {
   try {
     const result = await db.execute({
       sql: 'SELECT character_id, rating FROM character_ratings WHERE user_id = ?',
-      args: [req.user.id]
+      args: [req.user.id],
     })
-    // Gibt Map zurück: { characterId: rating }
     const map = {}
     for (const row of result.rows) map[row.character_id] = row.rating
     res.json(map)
@@ -38,18 +56,21 @@ router.get('/my-ratings', auth, async (req, res) => {
   }
 })
 
-// POST /api/characters/rate  — Charakter bewerten
+// ── POST /api/characters/rate ────────────────────────────────────────────────
+// Charakter bewerten (1-10)
 router.post('/rate', auth, async (req, res) => {
   try {
     const { characterId, rating } = req.body
-    if (!characterId || !rating || rating < 1 || rating > 5)
-      return res.status(400).json({ message: 'Ungültige Bewertung.' })
+    if (!characterId || !rating || rating < 1 || rating > 10)
+      return res.status(400).json({ message: 'Bewertung muss zwischen 1 und 10 liegen.' })
 
+    const now = new Date().toISOString()
     await db.execute({
       sql: `INSERT INTO character_ratings (user_id, character_id, rating, updated_at)
-            VALUES (?, ?, ?, datetime('now'))
-            ON CONFLICT(user_id, character_id) DO UPDATE SET rating = excluded.rating, updated_at = excluded.updated_at`,
-      args: [req.user.id, characterId, rating]
+            VALUES (?, ?, ?, ?)
+            ON CONFLICT(user_id, character_id)
+            DO UPDATE SET rating = excluded.rating, updated_at = excluded.updated_at`,
+      args: [req.user.id, characterId, rating, now],
     })
     res.json({ message: 'Bewertung gespeichert.' })
   } catch (err) {
@@ -58,37 +79,25 @@ router.post('/rate', auth, async (req, res) => {
   }
 })
 
-// GET /api/characters/top5  — eigene Top 5
+// ── GET /api/characters/top5 ─────────────────────────────────────────────────
+// Eigene Top 5 (höchst bewertete Charaktere des Users, sortiert nach Rating)
 router.get('/top5', auth, async (req, res) => {
   try {
     const result = await db.execute({
-      sql: 'SELECT character_id, position FROM user_top5 WHERE user_id = ? ORDER BY position',
-      args: [req.user.id]
+      sql: `SELECT
+              ac.id, ac.name, ac.lastname, ac.age, ac.animeid,
+              a.animename,
+              cr.rating
+            FROM character_ratings cr
+            JOIN anime_characters ac ON ac.id = cr.character_id
+            JOIN anime             a  ON a.id  = ac.animeid
+            WHERE cr.user_id = ?
+            ORDER BY cr.rating DESC
+            LIMIT 5`,
+      args: [req.user.id],
     })
-    res.json(result.rows.map(r => ({ characterId: r.character_id, position: r.position })))
+    res.json(result.rows)
   } catch (err) {
-    res.status(500).json({ message: 'Serverfehler.' })
-  }
-})
-
-// PUT /api/characters/top5  — Top 5 speichern (Array von character_ids, Index = Position)
-router.put('/top5', auth, async (req, res) => {
-  try {
-    const { list } = req.body // Array mit max. 5 character_ids
-    if (!Array.isArray(list) || list.length > 5)
-      return res.status(400).json({ message: 'Liste muss ein Array mit max. 5 Einträgen sein.' })
-
-    await db.execute({ sql: 'DELETE FROM user_top5 WHERE user_id = ?', args: [req.user.id] })
-
-    for (let i = 0; i < list.length; i++) {
-      await db.execute({
-        sql: 'INSERT INTO user_top5 (user_id, character_id, position) VALUES (?, ?, ?)',
-        args: [req.user.id, list[i], i + 1]
-      })
-    }
-    res.json({ message: 'Top 5 gespeichert.' })
-  } catch (err) {
-    console.error(err)
     res.status(500).json({ message: 'Serverfehler.' })
   }
 })

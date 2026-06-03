@@ -18,12 +18,8 @@ export const useChatStore = defineStore('chat', () => {
 
   async function sendMessage(text) {
     if (!text.trim()) return
-    try {
-      const { data } = await api.post('/chat/messages', { text })
-      messages.value.push(data)
-    } catch (err) {
-      throw err
-    }
+    const { data } = await api.post('/chat/messages', { text })
+    messages.value.push(data)
   }
 
   return { messages, loading, fetchMessages, sendMessage }
