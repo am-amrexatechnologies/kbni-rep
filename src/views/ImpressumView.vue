@@ -16,7 +16,7 @@
               <h2>Angaben gemäß § 5 TMG</h2>
               <p>
                 KBNI Platform<br>
-                Musterstraße 1<br>
+                Michaelsbucherstraße 14<br>
                 94447 Plattling<br>
                 Deutschland
               </p>
@@ -30,7 +30,7 @@
             <section class="legal-section">
               <h2>Kontakt</h2>
               <p>
-                E-Mail: <a href="mailto:info@kbni.app" class="legal-link">info@kbni.app</a>
+                E-Mail: <a href="mailto:alexdemardari@gmail.com" class="legal-link">alexdemardari@gmail.com</a>
               </p>
             </section>
 
@@ -38,7 +38,7 @@
               <h2>Verantwortlich für den Inhalt (§ 55 Abs. 2 RStV)</h2>
               <p>
                 Alexandru Mardari<br>
-                Musterstraße 1<br>
+                Michaelsbucherstraße 14 1<br>
                 94447 Plattling
               </p>
             </section>
