@@ -37,8 +37,8 @@
               <p>
                 Die verantwortliche Stelle für die Datenverarbeitung auf dieser Website ist:<br><br>
                 Alexandru Mardari<br>
-                Musterstraße 1, 94447 Plattling<br>
-                E-Mail: info@kbni.app
+                Michaelsbucherstraße 14, 94447 Plattling<br>
+                E-Mail: alexdemardari@gmail.com
               </p>
               <h3>Speicherdauer</h3>
               <p>
