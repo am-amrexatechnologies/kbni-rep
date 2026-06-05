@@ -64,7 +64,7 @@
                 Du hast jederzeit das Recht auf unentgeltliche Auskunft über Herkunft, Empfänger und Zweck deiner gespeicherten personenbezogenen Daten. Du hast außerdem ein Recht, die Berichtigung oder Löschung dieser Daten zu verlangen. Wenn du eine Einwilligung zur Datenverarbeitung erteilt hast, kannst du diese Einwilligung jederzeit für die Zukunft widerrufen. Des Weiteren hast du das Recht, unter bestimmten Umständen die Einschränkung der Verarbeitung deiner personenbezogenen Daten zu verlangen.
               </p>
               <p style="margin-top:10px">
-                Zur Ausübung deiner Rechte wende dich per E-Mail an: <a href="mailto:info@kbni.app" class="legal-link">info@kbni.app</a>
+                Zur Ausübung deiner Rechte wende dich per E-Mail an: <a href="mailto:alexdemardari@gmail.com" class="legal-link">alexdemardari@gmail.com</a>
               </p>
             </section>
           </div>
